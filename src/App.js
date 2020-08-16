@@ -4,25 +4,40 @@ import Operation from './components/operation/Operation'
 import History from './components/history/History'
 
 class App extends Component {
-
     state = {
         transactions: [],
-        description: this.state.description,
-        amount: this.state.amount,
+        description: '',
+        amount: '',
     }
 
-    addTransaction(add){
+    addTransaction = add => {
+
+        const transactions = [...this.state.transactions];
+
         const transaction = {
             id: `cmr${(+new Date).toString(16)}`,
+            description: this.state.description,
+            amount: this.state.amount,
+            add
+        }
+
+        transactions.push(transaction)
+        this.setState({
+            transactions,
             description: '',
             amount: '',
-        }
+        });
+
     }
 
-    addAmount(e){
+    addAmount = e => {
         this.setState({amount: e.target.value})
     }
 
+    addDescription = e => {
+        this.setState({description: e.target.value})
+    }
+    
     render() {
         return (
             <React.Fragment>
@@ -32,10 +47,13 @@ class App extends Component {
             <main>
                 <div className="container">
                     <Total/>
-                    <History/>
+                    <History transactions={this.state.transactions}/>
                     <Operation 
                         addTransaction={this.addTransaction}
                         addAmount={this.addAmount}
+                        addDescription={this.addDescription}
+                        description={this.state.description}
+                        amount={this.state.amount}
                     />
                 </div>
             </main>
